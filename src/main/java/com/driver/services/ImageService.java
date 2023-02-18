@@ -39,41 +39,51 @@ public class ImageService {
 
     public int countImagesInScreen(Integer id, String screenDimensions) {
         //Find the number of images of given dimensions that can fit in a screen having `screenDimensions`
-        StringBuilder st=new StringBuilder();
-        int ch1=-1;
-        int ch2=-1;
+        int l=Integer.MIN_VALUE;
+        int b=Integer.MIN_VALUE;
+        StringBuilder len=new StringBuilder();
+        StringBuilder br=new StringBuilder();
 
-        for(int a=0;a<screenDimensions.length();a++) {
-            if (screenDimensions.charAt(a) == 'X') {
-                if (ch1 == -1) ch1 = Integer.parseInt(st.toString());
-                else ch2 = Integer.parseInt(st.toString());
-                st = new StringBuilder();
-
-            } else {
-                st.append(screenDimensions.charAt(a));
-            }
+        int a=0;
+        while(a<screenDimensions.length()){
+            if(screenDimensions.charAt(a)=='X') break;
+            len.append(screenDimensions.charAt(a));
+            a++;
+        }
+        a++;
+        while(a<screenDimensions.length()){
+            br.append(screenDimensions.charAt(a));
+            a++;
         }
 
-            Image image=imageRepository2.findById(id).get();
-            st=new StringBuilder();
-            String temp=image.getDimensions();
-            int c=-1;
-            int b=-1;
+        l=Integer.parseInt(len.toString());
+        b=Integer.parseInt(br.toString());
 
-            for(int a=0;a<temp.length();a++){
-                if(temp.charAt(a)=='X')
-                {
-                    if(c==-1) a=Integer.parseInt(st.toString());
-                    else b=Integer.parseInt(st.toString());
-                    st=new StringBuilder();
-                }
-                else {
-                    st.append(temp.charAt(a));
-                }
+        len=new StringBuilder();
+        br=new StringBuilder();
 
-            }
+        int l1=Integer.MIN_VALUE;
+        int b1=Integer.MAX_VALUE;
 
-            return (ch1*ch2)/(c*b);
+        a=0;
+        Image image=imageRepository2.findById(id).get();
+        String t=image.getDimensions();
+        while(a<t.length()){
+            if(t.charAt(a)=='X') break;
+            len.append(t.charAt(a));
+            a++;
+        }
+        a++;
+        while(a<t.length()){
+            br.append(t.charAt(a));
+            a++;
+        }
 
+        l1=Integer.parseInt(len.toString());
+        b1=Integer.parseInt(br.toString());
+
+        int t1=l/l1;
+        int t2=b/b1;
+        return t1*t2;
     }
 }
